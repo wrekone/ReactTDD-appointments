@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/wrekone/ReactTDD-appointments/issues"
   },
-  "homepage": "https://github.com/wrekone/ReactTDD-appointments#readme"
+  "homepage": "https://github.com/wrekone/ReactTDD-appointments#readme",
+  "devDependencies": {
+    "jest": "^29.2.0"
+  }
 }
