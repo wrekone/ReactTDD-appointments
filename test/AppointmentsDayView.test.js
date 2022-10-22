@@ -1,40 +1,29 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import { act } from "react-dom/test-utils";
 
 import { Appointment, AppointmentsDayView } from "../src/AppointmentsDayView";
+import { click, initializeReactContainer, render } from "./reactTestExtensions";
 
 describe("Appointment", () => {
-  let container;
-
   beforeEach(() => {
-    container = document.createElement("div");
-    document.body.replaceChildren(container);
+    initializeReactContainer();
   });
-
-  const render = (component) =>
-    act(() => {
-      ReactDOM.createRoot(container).render(component);
-    });
 
   it("renders the customer first name", () => {
     const customer = { firstName: "Ashley" };
     render(<Appointment customer={customer} />);
 
-    expect(document.body.textContent).toContain("Ashley");
+    expect(document.body).toContainText("Ashley");
   });
 
   it("renders another customer first name", () => {
     const customer = { firstName: "Jordan" };
     render(<Appointment customer={customer} />);
 
-    expect(document.body.textContent).toContain("Jordan");
+    expect(document.body).toContainText("Jordan");
   });
 });
 
 describe("AppointmentsDayView", () => {
-  let container;
-
   const today = new Date();
   const twoAppointments = [
     { startsAt: today.setHours(12, 0), customer: { firstName: "Ashley" } },
@@ -42,14 +31,8 @@ describe("AppointmentsDayView", () => {
   ];
 
   beforeEach(() => {
-    container = document.createElement("div");
-    document.body.replaceChildren(container);
+    initializeReactContainer();
   });
-
-  const render = (component) =>
-    act(() => {
-      ReactDOM.createRoot(container).render(component);
-    });
 
   it("render a div with the right id", () => {
     render(<AppointmentsDayView appointments={[]} />);
@@ -77,14 +60,14 @@ describe("AppointmentsDayView", () => {
 
     const listChildren = document.querySelectorAll("li");
 
-    expect(listChildren[0].textContent).toEqual("12:00");
-    expect(listChildren[1].textContent).toEqual("13:00");
+    expect(listChildren[0]).toContainText("12:00");
+    expect(listChildren[1]).toContainText("13:00");
   });
 
   it("initially shows a message saying there are no appointments today", () => {
     render(<AppointmentsDayView appointments={[]} />);
 
-    expect(document.body.textContent).toContain(
+    expect(document.body).toContainText(
       "There are no appointments scheduled for today."
     );
   });
@@ -92,7 +75,7 @@ describe("AppointmentsDayView", () => {
   it("selects the first appointment by default", () => {
     render(<AppointmentsDayView appointments={twoAppointments} />);
 
-    expect(document.body.textContent).toContain("Ashley");
+    expect(document.body).toContainText("Ashley");
   });
 
   it("has a button element in each li", () => {
@@ -108,8 +91,8 @@ describe("AppointmentsDayView", () => {
     render(<AppointmentsDayView appointments={twoAppointments} />);
 
     const button = document.querySelectorAll("button")[1];
-    act(() => button.click());
+    click(button);
 
-    expect(document.body.textContent).toContain("Jordan");
+    expect(document.body).toContainText("Jordan");
   });
 });
